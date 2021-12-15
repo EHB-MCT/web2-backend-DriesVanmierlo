@@ -143,7 +143,7 @@ app.post('/saveKapsalon', async (req, res) => {
 })
 
 //Update a kapsalon
-app.put('/kapsalons/:id', async (req, res) => {
+app.put('/updateKapsalon/:id', async (req, res) => {
     if (!req.body.kapid || !req.body.name || !req.body.city || !req.body.restaurant || !req.body.type || !req.body.delivered || !req.body.price || !req.body.ratings || !req.body.mapboxToken || !req.body.mapboxStyle) {
         res.status(400).send('Bad request: missing id, name, city, restaurant, type, delivered, price, ratings, mapboxToken or mapboxStyle');
         return;
@@ -203,7 +203,7 @@ app.put('/kapsalons/:id', async (req, res) => {
 
 })
 
-app.delete('/kapsalons/:id', async (req, res) => {
+app.delete('/deleteKapsalon/:id', async (req, res) => {
     try {
         //Connect to the database
         await client.connect();
