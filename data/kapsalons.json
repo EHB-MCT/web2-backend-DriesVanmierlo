@@ -1,0 +1,38 @@
+{
+    "123456": {
+        "name": "Kapsalon kebab",
+        "restaurant": "Tasty Foods",
+        "type": "kebab",
+        "delivered": ["pickup", "delivery"],
+        "price": 8.00,
+        "ratings": [{
+            "fries": 4,
+            "meat": 4.5,
+            "toppings": 3.5
+        }, {
+            "fries": 4.5,
+            "meat": 4,
+            "toppings": 3.5
+        }],
+        "mapboxToken": "pk.eyJ1IjoiZHJpZXN2YW5taWVybG8iLCJhIjoiY2t1anBwbmFpMG0zdTJwbzZoM2R3cWltZSJ9.8-JHlbflqXHGMJ2z-JAM2Q",
+        "mapboxStyle": "mapbox://styles/driesvanmierlo/ckuvq484l1m8s17p5ll8moyrj/draft"
+    },
+    "654321": {
+        "name": "Kapsalon chicken",
+        "restaurant": "Istanbul",
+        "type": "chicken",
+        "delivered": ["pickup"],
+        "price": 8.50,
+        "ratings": [{
+            "fries": 3.5,
+            "meat": 4,
+            "toppings": 3.0
+        }, {
+            "fries": 4,
+            "meat": 4,
+            "toppings": 3
+        }],
+        "mapboxToken": "pk.eyJ1IjoiZHJpZXN2YW5taWVybG8iLCJhIjoiY2t1anBwbmFpMG0zdTJwbzZoM2R3cWltZSJ9.8-JHlbflqXHGMJ2z-JAM2Q",
+        "mapboxStyle": "mapbox://styles/driesvanmierlo/ckuvq484l1m8s17p5ll8moyrj/draft"
+    }
+}
