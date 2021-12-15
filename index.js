@@ -5,12 +5,13 @@ const {
     MongoClient
 } = require('mongodb');
 const config = require('./config.json');
+require('dotenv').config();
 
 //Create the mongo client to use
-const client = new MongoClient(config.finalUrl);
+const client = new MongoClient(process.env.FINAL_URL);
 
 const app = express();
-const port = 1500;
+const port = process.env.PORT;
 
 app.use(express.static('public'));
 app.use(bodyParser.json());
