@@ -2,10 +2,10 @@
     "123321": {
         "name": "Kapsalon chicken",
         "city": "Leuven",
-        "restaurant": "Tasty Foods",
+        "restaurant": "Tasty Food Vesalius",
         "type": "chicken",
         "delivered": ["pickup", "delivery"],
-        "price": 8,
+        "price": 8.50,
         "ratings": [],
         "mapboxToken": "pk.eyJ1IjoiZHJpZXN2YW5taWVybG8iLCJhIjoiY2t1anBwbmFpMG0zdTJwbzZoM2R3cWltZSJ9.8-JHlbflqXHGMJ2z-JAM2Q",
         "mapboxStyle": "mapbox://styles/driesvanmierlo/ckuvq484l1m8s17p5ll8moyrj/draft"
@@ -13,10 +13,10 @@
     "123456": {
         "name": "Kapsalon kebab",
         "city": "Leuven",
-        "restaurant": "Tasty Foods",
+        "restaurant": "Tasty Food Vesalius",
         "type": "kebab",
         "delivered": ["pickup", "delivery"],
-        "price": 8,
+        "price": 8.50,
         "ratings": [{
             "fries": 4,
             "meat": 4.5,

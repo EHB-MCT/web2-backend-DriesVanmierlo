@@ -1,6 +1,14 @@
 const express = require('express');
 const fs = require('fs/promises');
 const bodyParser = require('body-parser');
+const {
+    MongoClient
+} = require('mongodb');
+const config = require('./config.json');
+
+//Create the mongo client to use
+const client = new MongoClient(config.finalUrl);
+
 const app = express();
 const port = 1500;
 
@@ -12,18 +20,30 @@ app.get('/', (req, res) => {
     res.status(300).redirect('/info.html');
 });
 
-//Return all kapsalons from the file
+//Return all kapsalons from the database
 app.get('/kapsalons', async (req, res) => {
 
     try {
-        //Read file
-        let data = await fs.readFile('data/kapsalons.json');
+
+        //Connect to the database
+        await client.connect();
+
+        //Retrieve the kapsalons collection data
+        const colli = client.db("kapsamazing").collection("kapsalons");
+        const kapsalons = await colli.find({}).toArray();
+
 
         //Send back the file
-        res.status(200).send(JSON.parse(data));
+        res.status(200).send(kapsalons);
 
     } catch (error) {
-        res.status(500).send('File could not be read! Try again later...')
+        console.log(error)
+        res.status(500).send({
+            error: 'Something went wrong',
+            value: error
+        });
+    } finally {
+        await client.close();
     }
 });
 
