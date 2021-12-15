@@ -1,6 +1,7 @@
 const express = require('express');
 const fs = require('fs/promises');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const {
     MongoClient,
     ObjectId
@@ -15,6 +16,7 @@ const port = process.env.PORT;
 
 app.use(express.static('public'));
 app.use(bodyParser.json());
+app.use(cors());
 
 //Root route
 app.get('/', (req, res) => {
