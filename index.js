@@ -4,7 +4,6 @@ const bodyParser = require('body-parser');
 const {
     MongoClient
 } = require('mongodb');
-const config = require('./config.json');
 require('dotenv').config();
 
 //Create the mongo client to use
