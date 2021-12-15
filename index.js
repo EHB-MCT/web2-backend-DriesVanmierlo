@@ -2,7 +2,8 @@ const express = require('express');
 const fs = require('fs/promises');
 const bodyParser = require('body-parser');
 const {
-    MongoClient
+    MongoClient,
+    ObjectId
 } = require('mongodb');
 require('dotenv').config();
 
@@ -141,6 +142,91 @@ app.post('/saveKapsalon', async (req, res) => {
     }
 })
 
+//Update a kapsalon
+app.put('/kapsalons/:id', async (req, res) => {
+    if (!req.body.kapid || !req.body.name || !req.body.city || !req.body.restaurant || !req.body.type || !req.body.delivered || !req.body.price || !req.body.ratings || !req.body.mapboxToken || !req.body.mapboxStyle) {
+        res.status(400).send('Bad request: missing id, name, city, restaurant, type, delivered, price, ratings, mapboxToken or mapboxStyle');
+        return;
+    }
+
+    try {
+        //Connect to the database
+        await client.connect();
+
+        //Retrieve the kapsalons collection data
+        const colli = client.db("kapsamazing").collection("kapsalons");
+
+        const query = {
+            _id: ObjectId(req.params.id)
+        };
+
+        //Create the updated kapsalon object
+        let updateKapsalon = {
+            $set: {
+                kapid: req.body.kapid,
+                name: req.body.name,
+                city: req.body.city,
+                restaurant: req.body.restaurant,
+                type: req.body.type,
+                delivered: req.body.delivered,
+                price: req.body.price,
+                ratings: req.body.ratings,
+                mapboxToken: req.body.mapboxToken,
+                mapboxStyle: req.body.mapboxStyle
+            }
+        };
+
+        //Update the database
+        const updateResult = await colli.updateOne(query, updateKapsalon);
+
+        if (updateResult) {
+            res.status(201).send({
+                succes: "Kapsalon is succesfull updated!",
+                value: updateResult
+            })
+            return;
+        } else {
+            res.status(400).send({
+                error: `Challenge with id "${req.body.id}" could not been found!.`,
+                value: error,
+            });
+        }
+
+    } catch (error) {
+        res.status(500).send({
+            error: 'Something went wrong',
+            value: error
+        });
+    } finally {
+        await client.close();
+    }
+
+})
+
+app.delete('/kapsalons/:id', async (req, res) => {
+    try {
+        //Connect to the database
+        await client.connect();
+
+        //Retrieve the kapsalons collection data
+        const colli = client.db("kapsamazing").collection("kapsalons");
+
+        const query = {
+            _id: ObjectId(req.params.id)
+        };
+
+        await colli.deleteOne(query)
+        res.status(200).json({
+            succes: 'Succesfully deleted!',
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            error: 'Something went wrong',
+            value: error
+        })
+    }
+})
 
 
 app.listen(port, () => {
