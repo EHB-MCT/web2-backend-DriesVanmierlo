@@ -49,14 +49,21 @@ app.get('/kapsalons', async (req, res) => {
 
 // /kapsalons?id=123456
 app.get('/kapsalon', async (req, res) => {
-    console.log(req.query.id);
+    // id is located in the query: req.query.id
 
     try {
-        //Read file
-        let kapsalons = JSON.parse(await fs.readFile('data/kapsalons.json'));
+        //Connect to the database
+        await client.connect();
 
-        //Try and find the kapsalon with provided id
-        let kap = kapsalons[req.query.id]
+        //Retrieve the kapsalons collection data
+        const colli = client.db("kapsamazing").collection("kapsalons");
+
+        //Only look for the kapsalon with this kapid
+        const query = {
+            kapid: req.query.id
+        };
+
+        const kap = await colli.findOne(query);
 
         if (kap) {
             //Send back the file
@@ -68,7 +75,12 @@ app.get('/kapsalon', async (req, res) => {
 
     } catch (error) {
         console.log(error)
-        res.status(500).send('File could not be read! Try again later...')
+        res.status(500).send({
+            error: 'Something went wrong',
+            value: error
+        })
+    } finally {
+        await client.close();
     }
 
 })
@@ -76,16 +88,31 @@ app.get('/kapsalon', async (req, res) => {
 //Save a kapsalon
 app.post('/saveKapsalon', async (req, res) => {
 
-    if (!req.body.id || !req.body.name || !req.body.city || !req.body.restaurant || !req.body.type || !req.body.delivered || !req.body.price || !req.body.ratings || !req.body.mapboxToken || !req.body.mapboxStyle) {
+    if (!req.body.kapid || !req.body.name || !req.body.city || !req.body.restaurant || !req.body.type || !req.body.delivered || !req.body.price || !req.body.ratings || !req.body.mapboxToken || !req.body.mapboxStyle) {
         res.status(400).send('Bad request: missing id, name, city, restaurant, type, delivered, price, ratings, mapboxToken or mapboxStyle');
         return;
     }
 
     try {
-        //Read the file
-        let kapsalons = JSON.parse(await fs.readFile('data/kapsalons.json'));
 
-        kapsalons[req.body.id] = {
+        //Connect to the database
+        await client.connect();
+
+        //Retrieve the kapsalons collection data
+        const colli = client.db("kapsamazing").collection("kapsalons");
+
+        //Validation for double boardgames
+        const kap = await colli.findOne({
+            kapid: req.body.kapid
+        });
+        if (kap) {
+            res.status(400).send('Bad request: kapsalon already exists with kapid: ' + req.body.kapid);
+            return;
+        }
+
+        //Create the new kapsalon object
+        let newKapsalon = {
+            kapid: req.body.kapid,
             name: req.body.name,
             city: req.body.city,
             restaurant: req.body.restaurant,
@@ -97,15 +124,20 @@ app.post('/saveKapsalon', async (req, res) => {
             mapboxStyle: req.body.mapboxStyle
         }
 
-        //Save the file
-        await fs.writeFile('data/kapsalons.json', JSON.stringify(kapsalons));
+        //Insert into the database
+        let insertResult = await colli.insertOne(newKapsalon);
 
         //Send back succesmessage
-        res.status(201).send('Kapsalon succesfully saved with id: ' + req.body.id);
+        res.status(201).send('Kapsalon succesfully saved with kapid: ' + req.body.kapid);
         return;
 
     } catch (error) {
-        res.status(500).send('Could not save new kapsalon')
+        res.status(500).send({
+            error: 'Something went wrong',
+            value: error
+        });
+    } finally {
+        await client.close();
     }
 })
 
