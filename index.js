@@ -50,8 +50,8 @@ app.get('/kapsalons', async (req, res) => {
     }
 });
 
-// /kapsalons?id=123456
-app.get('/kapsalon', async (req, res) => {
+// /kapsalons?id=61b9df9cd5c8a1b90a90a5ff
+app.get('/kapsalons/:id', async (req, res) => {
     // id is located in the query: req.query.id
 
     try {
@@ -63,7 +63,7 @@ app.get('/kapsalon', async (req, res) => {
 
         //Only look for the kapsalon with this kapid
         const query = {
-            kapid: req.query.id
+            _id: ObjectId(req.params.id)
         };
 
         const kap = await colli.findOne(query);
