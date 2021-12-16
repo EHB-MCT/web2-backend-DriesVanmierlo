@@ -88,6 +88,44 @@ app.get('/kapsalon/:id', async (req, res) => {
 
 })
 
+// /kapsalon?id=123456
+app.get('/kapsalon', async (req, res) => {
+    // id is located in the query: req.query.id
+
+    try {
+        //Connect to the database
+        await client.connect();
+
+        //Retrieve the kapsalons collection data
+        const colli = client.db("kapsamazing").collection("kapsalons");
+
+        //Only look for the kapsalon with this kapid
+        const query = {
+            kapid: req.query.id
+        };
+
+        const kap = await colli.findOne(query);
+
+        if (kap) {
+            //Send back the file
+            res.status(200).send(kap);
+            return;
+        } else {
+            res.status(400).send('Kapsalon could not be found with id: ' + req.query.id);
+        }
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({
+            error: 'Something went wrong',
+            value: error
+        })
+    } finally {
+        await client.close();
+    }
+
+})
+
 //Save a kapsalon
 app.post('/saveKapsalon', async (req, res) => {
 
