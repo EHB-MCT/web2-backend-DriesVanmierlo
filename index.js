@@ -50,8 +50,8 @@ app.get('/kapsalons', async (req, res) => {
     }
 });
 
-// /kapsalons?id=61b9df9cd5c8a1b90a90a5ff
-app.get('/kapsalons/:id', async (req, res) => {
+// /kapsalons/:id?id=61b9df9cd5c8a1b90a90a5ff
+app.get('/kapsalon/:id', async (req, res) => {
     // id is located in the query: req.query.id
 
     try {
