@@ -129,8 +129,8 @@ app.get('/kapsalon', async (req, res) => {
 //Save a kapsalon
 app.post('/saveKapsalon', async (req, res) => {
 
-    if (!req.body.kapid || !req.body.name || !req.body.city || !req.body.restaurant || !req.body.type || !req.body.delivered || !req.body.price || !req.body.ratings || !req.body.mapboxToken || !req.body.mapboxStyle) {
-        res.status(400).send('Bad request: missing id, name, city, restaurant, type, delivered, price, ratings, mapboxToken or mapboxStyle');
+    if (!req.body.kapid || !req.body.name || !req.body.city || !req.body.restaurant || !req.body.type || !req.body.delivered || !req.body.price || !req.body.ratings || !req.body.mapboxToken || !req.body.mapboxStyle || !req.body.latestGeneralRating) {
+        res.status(400).send('Bad request: missing id, name, city, restaurant, type, delivered, price, ratings, mapboxToken, mapboxStyle or latestGeneralRating');
         return;
     }
 
@@ -162,7 +162,8 @@ app.post('/saveKapsalon', async (req, res) => {
             price: req.body.price,
             ratings: req.body.ratings,
             mapboxToken: req.body.mapboxToken,
-            mapboxStyle: req.body.mapboxStyle
+            mapboxStyle: req.body.mapboxStyle,
+            latestGeneralRating: req.body.latestGeneralRating
         }
 
         //Insert into the database
@@ -184,8 +185,8 @@ app.post('/saveKapsalon', async (req, res) => {
 
 //Update a kapsalon
 app.put('/updateKapsalon/:id', async (req, res) => {
-    if (!req.body.kapid || !req.body.name || !req.body.city || !req.body.restaurant || !req.body.type || !req.body.delivered || !req.body.price || !req.body.ratings || !req.body.mapboxToken || !req.body.mapboxStyle) {
-        res.status(400).send('Bad request: missing id, name, city, restaurant, type, delivered, price, ratings, mapboxToken or mapboxStyle');
+    if (!req.body.kapid || !req.body.name || !req.body.city || !req.body.restaurant || !req.body.type || !req.body.delivered || !req.body.price || !req.body.ratings || !req.body.mapboxToken || !req.body.mapboxStyle || !req.body.latestGeneralRating) {
+        res.status(400).send('Bad request: missing id, name, city, restaurant, type, delivered, price, ratings, mapboxToken, mapboxStyle or latestGeneralRating');
         return;
     }
 
@@ -212,7 +213,8 @@ app.put('/updateKapsalon/:id', async (req, res) => {
                 price: req.body.price,
                 ratings: req.body.ratings,
                 mapboxToken: req.body.mapboxToken,
-                mapboxStyle: req.body.mapboxStyle
+                mapboxStyle: req.body.mapboxStyle,
+                latestGeneralRating: req.body.latestGeneralRating
             }
         };
 
@@ -264,7 +266,8 @@ app.put('/rateKapsalon/:id', async (req, res) => {
         //Create the updated kapsalon object
         let updateKapsalon = {
             $set: {
-                ratings: req.body.ratings
+                ratings: req.body.ratings,
+                latestGeneralRating: req.body.latestGeneralRating
             }
         };
 
