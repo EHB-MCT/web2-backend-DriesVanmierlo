@@ -129,8 +129,8 @@ app.get('/kapsalon', async (req, res) => {
 //Save a kapsalon
 app.post('/saveKapsalon', async (req, res) => {
 
-    if (!req.body.kapid || !req.body.name || !req.body.city || !req.body.restaurant || !req.body.type || !req.body.delivered || !req.body.price || !req.body.ratings || !req.body.mapboxToken || !req.body.mapboxStyle || !req.body.latestGeneralRating) {
-        res.status(400).send('Bad request: missing id, name, city, restaurant, type, delivered, price, ratings, mapboxToken, mapboxStyle or latestGeneralRating');
+    if (!req.body.kapid || !req.body.name || !req.body.city || !req.body.restaurant || !req.body.type || !req.body.delivered || !req.body.price || !req.body.ratings || !req.body.mapboxToken || !req.body.mapboxStyle || !req.body.latestGeneralRating || !req.body.image || !req.body.link) {
+        res.status(400).send('Bad request: missing id, name, city, restaurant, type, delivered, price, ratings, mapboxToken, mapboxStyle, latestGeneralRating, image or rating');
         return;
     }
 
@@ -163,7 +163,9 @@ app.post('/saveKapsalon', async (req, res) => {
             ratings: req.body.ratings,
             mapboxToken: req.body.mapboxToken,
             mapboxStyle: req.body.mapboxStyle,
-            latestGeneralRating: req.body.latestGeneralRating
+            latestGeneralRating: req.body.latestGeneralRating,
+            image: req.body.image,
+            link: req.body.link
         }
 
         //Insert into the database
@@ -185,8 +187,8 @@ app.post('/saveKapsalon', async (req, res) => {
 
 //Update a kapsalon
 app.put('/updateKapsalon/:id', async (req, res) => {
-    if (!req.body.kapid || !req.body.name || !req.body.city || !req.body.restaurant || !req.body.type || !req.body.delivered || !req.body.price || !req.body.ratings || !req.body.mapboxToken || !req.body.mapboxStyle || !req.body.latestGeneralRating) {
-        res.status(400).send('Bad request: missing id, name, city, restaurant, type, delivered, price, ratings, mapboxToken, mapboxStyle or latestGeneralRating');
+    if (!req.body.kapid || !req.body.name || !req.body.city || !req.body.restaurant || !req.body.type || !req.body.delivered || !req.body.price || !req.body.ratings || !req.body.mapboxToken || !req.body.mapboxStyle || !req.body.latestGeneralRating || !req.body.image || !req.body.link) {
+        res.status(400).send('Bad request: missing id, name, city, restaurant, type, delivered, price, ratings, mapboxToken, mapboxStyle, latestGeneralRating, image or link');
         return;
     }
 
@@ -214,7 +216,9 @@ app.put('/updateKapsalon/:id', async (req, res) => {
                 ratings: req.body.ratings,
                 mapboxToken: req.body.mapboxToken,
                 mapboxStyle: req.body.mapboxStyle,
-                latestGeneralRating: req.body.latestGeneralRating
+                latestGeneralRating: req.body.latestGeneralRating,
+                image: req.body.image,
+                link: req.body.link
             }
         };
 
