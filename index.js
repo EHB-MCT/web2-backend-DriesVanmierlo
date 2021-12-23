@@ -51,7 +51,7 @@ app.get('/kapsalons', async (req, res) => {
     }
 });
 
-// /kapsalons/:id?id=61b9df9cd5c8a1b90a90a5ff
+// /kapsalons/61b9df9cd5c8a1b90a90a5ff
 app.get('/kapsalon/:id', async (req, res) => {
     // id is located in the query: req.query.id
 
@@ -333,8 +333,12 @@ app.delete('/deleteKapsalon/:id', async (req, res) => {
 //Return all admins from the database
 app.get('/admins', async (req, res) => {
     try {
+        //Connect to the database
         await client.connect();
-        const colli = client.db('kapsamazing').collection('admins');
+
+        //Retrieve the kapsalons collection data
+        const colli = client.db("kapsamazing").collection("admins");
+
         const allAdmins = await colli.find({}).toArray();
         res.status(200).send(allAdmins);
 
@@ -358,8 +362,11 @@ app.post('/registerAdmin', async (req, res) => {
             return;
         }
 
-        await client.connect()
-        const colli = client.db('kapsamazing').collection('admins')
+        //Connect to the database
+        await client.connect();
+
+        //Retrieve the kapsalons collection data
+        const colli = client.db("kapsamazing").collection("admins");
 
         const admin = await colli.findOne({
             email: req.body.email
@@ -408,8 +415,11 @@ app.post('/loginAdmin', async (req, res) => {
             return;
         }
 
-        await client.connect()
-        const colli = client.db('kapsamazing').collection('admins')
+        //Connect to the database
+        await client.connect();
+
+        //Retrieve the kapsalons collection data
+        const colli = client.db("kapsamazing").collection("admins");
 
         const admin = await colli.findOne({
             email: req.body.email

@@ -10,14 +10,22 @@
 
 <body>
     <h1>Kapsalon API documentation</h1>
+    <h2>Kapsalon routes</h2>
     <ul>
         <li>GET / - Documentation</li>
         <li>GET /kapsalons - get all kapsalons</li>
         <li>GET /kapsalon/61b9df9cd5c8a1b90a90a5ff - get kapsalon with id (from mongodb)</li>
         <li>GET /kapsalons?id=123456 - Get the kapsalon with kapid 123456</li>
-        <li>POST /saveKapsalon - saves the kapsalon in local file</li>
-        <li>PUT /kapsalons/id</li>
-        <li>DELETE /kapsalons/id</li>
+        <li>POST /saveKapsalon - saves the kapsalon with all data</li>
+        <li>PUT /updateKapsalon/id - updates all the data of the kapsalon with id</li>
+        <li>PUT /rateKapsalon/id - updates only the ratings and latest general rating of kapsalon with id</li>
+        <li>DELETE /deleteKapsalon/id - deletes kapsalon with id</li>
+    </ul>
+    <h2>Admin routes</h2>
+    <ul>
+        <li>GET /admins - get all admins</li>
+        <li>POST /registerAdmin - saves a new admin</li>
+        <li>POST /loginAdmin - checks if admindata is correct</li>
     </ul>
 </body>
 
