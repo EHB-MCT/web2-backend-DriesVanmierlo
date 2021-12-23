@@ -1,3 +1,4 @@
+const bcrypt = require('bcryptjs');
 const express = require('express');
 const fs = require('fs/promises');
 const bodyParser = require('body-parser');
@@ -327,6 +328,122 @@ app.delete('/deleteKapsalon/:id', async (req, res) => {
     }
 })
 
+//ADMINS
+
+//Return all admins from the database
+app.get('/admins', async (req, res) => {
+    try {
+        await client.connect();
+        const colli = client.db('kapsamazing').collection('admins');
+        const allAdmins = await colli.find({}).toArray();
+        res.status(200).send(allAdmins);
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            error: 'Something went wrong!',
+            value: error
+        });
+
+    } finally {
+        await client.close();
+    }
+});
+
+//Register a new admin
+app.post('/registerAdmin', async (req, res) => {
+    try {
+        if (!req.body.email || !req.body.password || !req.body.name) {
+            res.status(400).send('Bad register: missing email or password!');
+            return;
+        }
+
+        await client.connect()
+        const colli = client.db('kapsamazing').collection('admins')
+
+        const admin = await colli.findOne({
+            email: req.body.email
+        })
+
+        if (admin) {
+            res.status(400).send(`This account already exists, with email: "${req.body.email}" ! Use the right email.`);
+            return;
+        }
+
+        const {
+            email,
+            password,
+            name
+        } = req.body
+
+        const hash = await bcrypt.hash(password, 10);
+
+        let Admin = {
+            email: req.body.email,
+            password: hash,
+            name: req.body.name
+        }
+
+        await colli.insertOne(Admin);
+        res.status(201).json("Succesful added new admin");
+        return;
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({
+            error: 'Something went wrong',
+            value: error
+        })
+
+    } finally {
+        await client.close()
+    }
+});
+
+//Login admin
+app.post('/loginAdmin', async (req, res) => {
+    try {
+        if (!req.body.email || !req.body.password) {
+            res.status(400).send('Bad login: Missing email or password! Try again.');
+            return;
+        }
+
+        await client.connect()
+        const colli = client.db('kapsamazing').collection('admins')
+
+        const admin = await colli.findOne({
+            email: req.body.email
+        })
+
+        if (!admin) {
+            res.status(400).send('No account found with this email! Use a correct email.');
+            return;
+        }
+
+        const verifyPass = bcrypt.compareSync(req.body.password, admin.password);
+
+        if (verifyPass) {
+            res.status(200).json({
+                login: true,
+                id: admin._id,
+                name: admin.name,
+                email: admin.email
+            });
+        } else {
+            res.status(400).send("Wrong password, try again.")
+        }
+
+    } catch (error) {
+        console.log(error)
+        res.status(500).send({
+            error: 'Something went wrong',
+            value: error
+        })
+
+    } finally {
+        await client.close()
+    }
+});
 
 app.listen(port, () => {
     console.log(`API is running at port http://localhost:${port}`);
