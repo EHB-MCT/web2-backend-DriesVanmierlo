@@ -358,7 +358,7 @@ app.get('/admins', async (req, res) => {
 app.post('/registerAdmin', async (req, res) => {
     try {
         if (!req.body.email || !req.body.password || !req.body.name) {
-            res.status(400).send('Bad register: missing email or password!');
+            res.status(400).send('Missing email, password or name!');
             return;
         }
 
@@ -373,7 +373,7 @@ app.post('/registerAdmin', async (req, res) => {
         })
 
         if (admin) {
-            res.status(400).send(`This account already exists, with email: "${req.body.email}" ! Use the right email.`);
+            res.status(400).send(`This account already exists, email: ${req.body.email}`);
             return;
         }
 
@@ -411,7 +411,7 @@ app.post('/registerAdmin', async (req, res) => {
 app.post('/loginAdmin', async (req, res) => {
     try {
         if (!req.body.email || !req.body.password) {
-            res.status(400).send('Bad login: Missing email or password! Try again.');
+            res.status(400).send('Missing email or password! Try again.');
             return;
         }
 
